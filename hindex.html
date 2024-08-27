@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Point of Interest Management</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgGBjlEnlrlO2KdsQMFL70E_Ppo3GmFPs&callback=initMap" async defer></script>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+        #poi-form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h3>Point of Interest Management</h3>
+    <div id="map"></div>
+    
+    <form id="poi-form">
+        <label for="name">POI Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required>
+        <br><br>
+        <input type="hidden" id="lat" name="lat">
+        <input type="hidden" id="lng" name="lng">
+        <button type="submit">Save POI</button>
+    </form>
+    
+    <script>
+    let map, marker;
+
+        function initMap() {
+            const defaultLocation = { lat: -6.200000, lng: 106.816666 }; // Jakarta, Indonesia
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: defaultLocation,
+                zoom: 13
+            });
+
+            marker = new google.maps.Marker({
+                position: defaultLocation,
+                map: map,
+                draggable: true
+            });
+
+            google.maps.event.addListener(marker, 'position_changed', function () {
+                const lat = marker.getPosition().lat();
+                const lng = marker.getPosition().lng();
+                document.getElementById('lat').value = lat;
+                document.getElementById('lng').value = lng;
+                console.log(lat)
+            });
+
+            map.addListener('click', (event) => {
+                marker.setPosition(event.latLng);
+            });
+        }
+
+        document.getElementById('poi-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const description = document.getElementById('description').value;
+            const lat = document.getElementById('lat').value;
+            const lng = document.getElementById('lng').value;
+
+            fetch('save_poi.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `name=${name}&description=${description}&lat=${lat}&lng=${lng}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
