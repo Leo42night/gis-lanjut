@@ -1,0 +1,73 @@
+
+
+4. *Menghitung Nilai Bobot (Prioritas):*
+   - Jumlahkan setiap kolom dalam matriks perbandingan.
+   - Bagi setiap elemen matriks dengan jumlah kolomnya masing-masing untuk mendapatkan matriks yang dinormalisasi.
+   - Rata-rata nilai dari setiap baris pada matriks yang dinormalisasi untuk mendapatkan bobot atau prioritas relatif dari masing-masing kriteria.
+
+   *Contoh:*
+   Setelah normalisasi, misalnya bobot relatif untuk:
+   - *Akreditasi*: 0.45
+   - *Biaya Kuliah*: 0.25
+   - *Kualitas Pengajaran*: 0.20
+   - *Fasilitas Kampus*: 0.10
+
+5. *Menghitung Konsistensi (Consistency Ratio - CR):*
+   - Konsistensi penting dalam AHP untuk memastikan bahwa penilaian perbandingan berpasangan tidak bersifat acak atau tidak konsisten.
+   - Hitung *Consistency Index (CI)* dengan rumus:  
+     \[
+     CI = \frac{\lambda_{\text{max}} - n}{n - 1}
+     \]
+     Di mana:
+     - \(\lambda_{\text{max}}\) adalah nilai eigen terbesar dari matriks perbandingan.
+     - \(n\) adalah jumlah kriteria.
+   - Hitung *Consistency Ratio (CR)* dengan rumus:  
+     \[
+     CR = \frac{CI}{RI}
+     \]
+     Di mana:
+     - *RI* adalah Indeks Acak (Random Index) yang tergantung pada jumlah kriteria.
+
+   - Jika CR < 0.1 (10%), maka konsistensi dianggap dapat diterima.
+
+6. *Menghitung Skor Akhir Alternatif:*
+   - Gunakan bobot kriteria untuk menghitung skor total masing-masing alternatif. Setiap alternatif dikalikan dengan bobot kriteria yang relevan dan kemudian dijumlahkan untuk mendapatkan skor akhir.
+
+*Contoh Kasus: Memilih Universitas Terbaik dengan AHP*
+
+Misalkan ada 3 universitas (A, B, C) dan 4 kriteria (Akreditasi, Biaya Kuliah, Kualitas Pengajaran, Fasilitas Kampus).
+
+1. *Matriks Perbandingan Kriteria:*
+   Sudah dijelaskan pada langkah di atas.
+
+2. *Nilai Prioritas Kriteria:*
+   - Akreditasi: 0.45
+   - Biaya Kuliah: 0.25
+   - Kualitas Pengajaran: 0.20
+   - Fasilitas Kampus: 0.10
+
+3. *Matriks Perbandingan Alternatif untuk Setiap Kriteria:*
+   - Buat matriks perbandingan berpasangan untuk setiap alternatif berdasarkan setiap kriteria. Misalnya, untuk "Akreditasi", bandingkan Universitas A vs B, A vs C, dan B vs C.
+
+4. *Menghitung Bobot Alternatif untuk Setiap Kriteria:*
+   - Normalisasi dan hitung bobot relatif untuk setiap alternatif pada setiap kriteria.
+
+5. *Menghitung Skor Total:*
+   - Misalnya, untuk Universitas A:
+     \[
+     \text{Skor A} = (0.45 \times \text{bobot Akreditasi A}) + (0.25 \times \text{bobot Biaya Kuliah A}) + (0.20 \times \text{bobot Kualitas Pengajaran A}) + (0.10 \times \text{bobot Fasilitas Kampus A})
+     \]
+
+6. *Membandingkan Skor Akhir:*
+   - Universitas dengan skor tertinggi adalah pilihan terbaik.
+
+*Keuntungan AHP:*
+- Memungkinkan penggunaan kriteria yang berbeda dan menanganinya secara sistematis.
+- Dapat menggabungkan penilaian kualitatif dan kuantitatif.
+- Menyediakan cara untuk memeriksa konsistensi dalam penilaian.
+
+*Kekurangan AHP:*
+- Bisa menjadi rumit dan memakan waktu jika terdapat banyak kriteria dan alternatif.
+- Hasil akhir sangat bergantung pada penilaian subyektif dari pembuat keputusan.
+
+Metode AHP membantu dalam membuat keputusan yang lebih terstruktur dan transparan dengan mempertimbangkan banyak faktor dan alternatif yang ada.

@@ -4,6 +4,8 @@ include_once 'koneksi.php';
 if ($kon->connect_error) {
     die("Connection failed: " . $kon->connect_error);
 }
+
+//Ambil data untuk CRUD
 function getData()
 {
     global $kon;
@@ -11,6 +13,7 @@ function getData()
     return $kon->query($sql);
 }
 
+//Hapus Data
 if (isset($_GET['delete'])) {
     // Sanitize the input
     $id = filter_var($_GET['delete'], FILTER_VALIDATE_INT);
@@ -35,49 +38,54 @@ if (isset($_GET['delete'])) {
     $stmt->close();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['update'])) {
-    // Sanitize the input
-    $id = filter_var($_GET['update'], FILTER_VALIDATE_INT);
+//Edit Data by id
+function getDataById($id)
+{
+    global $kon;
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
 
-    $stmt = $kon->prepare("SELECT * FROM poi WHERE id= ?");
+        $stmt = $kon->prepare("SELECT * FROM poi WHERE id= ?");
 
-    if ($stmt === false) {
-        die("Failed to prepare the statement: " . $kon->error);
+        if ($stmt === false) {
+            die("Failed to prepare the statement: " . $kon->error);
+        }
+
+        $stmt->bind_param("i", $id);
+
+        if ($stmt->execute()) {
+
+            // Get the result set
+            $result = $stmt->get_result();
+
+            while ($data = $result->fetch_assoc()) {
+                // Output the result or return it from a function
+                return $data;
+            }
+            ;
+        }
+
+        // Close the connection
+        $stmt->close();
     }
-
-    $stmt->bind_param("i", $id);
-
-    if ($stmt->execute()) {
-
-        // Get the result set
-        $result = $stmt->get_result();
-
-        while ($row = $result->fetch_assoc()) {
-            // Output the result or return it from a function
-            echo "<script> var recordData = " . json_encode($row) . "; </script>";
-            $GLOBALS['data'] = $row;
-        };
-        
-    }
-
-    // Close the connection
-    $stmt->close();
-} else {
-    echo "<script> let recordData </script>";
 }
 
+// tambah atau update data
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // var_dump($_POST);
     $name = $_POST['name'];
     $description = $_POST['description'];
     $lat = (double) $_POST['lat'];
     $lng = (double) $_POST['lng'];
 
-    // prepare and bind
-
-    $stmt = $kon->prepare("INSERT INTO poi (name, description, lat, lng) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssdd", $name, $description, $lat, $lng);
-
+    if (isset($_POST['id'])) {
+        // prepare and bind
+        $id = $_POST['id'];
+        $stmt = $kon->prepare("UPDATE poi SET name=?, description=?, lat=?, lng=? WHERE id=?");
+        $stmt->bind_param("ssddi", $name, $description, $lat, $lng, $id);
+    } else {
+        // prepare and bind
+        $stmt = $kon->prepare("INSERT INTO poi (name, description, lat, lng) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssdd", $name, $description, $lat, $lng);
+    }
     // Execute the statement
     if ($stmt->execute()) {
         echo "POI saved successfully!";
